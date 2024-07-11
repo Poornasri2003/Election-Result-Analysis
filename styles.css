@@ -1,29 +1,57 @@
-/* style.css */
 body {
     font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #f0f0f0;
+}
+
+#app {
+    display: flex;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#sidebar {
+    flex: 1;
     padding: 20px;
 }
 
-h1 {
-    text-align: center;
+#draggableParties {
+    border: 1px solid #ccc;
+    padding: 10px;
+    max-height: 300px;
+    overflow-y: auto;
 }
 
-label {
-    display: block;
-    margin-top: 20px;
+.draggable {
+    cursor: move;
+    padding: 5px 10px;
+    margin: 5px;
+    border: 1px solid #ddd;
+    background-color: #f9f9f9;
 }
 
-select {
+#main {
+    flex: 2;
+    padding: 20px;
+}
+
+.alliance {
+    margin-bottom: 20px;
+}
+
+.alliance h3 {
+    margin-top: 0;
+}
+
+.allianceSelect {
     width: 100%;
-    height: 150px;
-}
-
-button {
-    display: block;
-    margin: 20px auto;
-    padding: 10px 20px;
+    padding: 10px;
 }
 
 #chart {
-    margin-top: 40px;
+    margin-top: 20px;
 }
