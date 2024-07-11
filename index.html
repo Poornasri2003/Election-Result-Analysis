@@ -7,29 +7,33 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div id="app">
-        <div id="sidebar">
-            <h2>Draggable Parties</h2>
-            <div id="draggableParties"></div>
+    <div class="container">
+        <div class="left">
+            <h2>Parties List</h2>
+            <input type="text" id="searchParty" placeholder="Search parties...">
+            <div id="draggableParties" class="draggable-container">
+                <!-- Parties will be dynamically added here -->
+            </div>
         </div>
-        <div id="main">
-            <h1>Election Results Analysis</h1>
-            <div id="alliances">
-                <div class="alliance">
-                    <h3>Alliance 1</h3>
-                    <select id="alliance1Select" class="allianceSelect" ondrop="drop(event, 'alliance1Select')" ondragover="allowDrop(event)"></select>
-                </div>
-                <div class="alliance">
-                    <h3>Alliance 2</h3>
-                    <select id="alliance2Select" class="allianceSelect" ondrop="drop(event, 'alliance2Select')" ondragover="allowDrop(event)"></select>
-                </div>
+        <div class="right">
+            <h2>Alliances</h2>
+            <div id="alliance1" class="droppable-container">
+                <h3>Alliance 1</h3>
+                <!-- Alliance 1 parties will be added here -->
+            </div>
+            <div id="alliance2" class="droppable-container">
+                <h3>Alliance 2</h3>
+                <!-- Alliance 2 parties will be added here -->
             </div>
             <button id="submit">Submit</button>
         </div>
     </div>
-    <div id="chart"></div>
 
-    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <div class="chart-container">
+        <div id="chart"></div>
+    </div>
+    
+    <script src="https://d3js.org/d3.v6.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
