@@ -1,37 +1,37 @@
 document.addEventListener('DOMContentLoaded', () => {
     const partiesList = [
+        // Your list of parties here...
         'dravidamunnetrakazhagam', 'kongunadumakkaldesiakkatchi', 'indiannationalcongress',
-    'communistpartyofindia', 'communistpartyofindiamarxist', 'viduthalaichiruthaigalkatchi',
-    'indianunionmuslimleague', 'marumalarchidravidamunnetrakazhagam',
-    'allindiaannadravidamunnetrakazhagam', 'puthiyatamilagam', 'socialdemocraticpartyofindia',
-    'desiyamurpokkudravidakazhagam', 'bharatiyajanataparty', 'indhiyajananayagakatchi',
-    'inthiyamakkalkalvimunnetrakazhagam', 'puthiyaneedhikatchi', 'tamizhagamakkalmunnetrakazhagam',
-    'pattalimakkalkatchi', 'tamilmaaniliacongressmoopanar', 'ammamakkalmunnettrakzagam',
-    'bahujansamajparty', 'naamtamilarkatchi', 'naadaalummakkalkatchi', 'desiyamakkalsakthikatchi',
-    'veeraththiyagivishwanatadhossthozhhialalarkalkkatchi', 'ganasangampartyofindia', 'bahujandravidaparty',
-    'thakkamkatchi', 'virokevirindianparty', 'annamgrdravidamakkalkalgam', 'aravoormunnetrakazhagam',
-    'samaniyamakkalnanalakatchi', 'bharatiyaprajaaikyataparty', 'puthiyamakkalttamilddesamkatchi',
-    'tamizhhagamurpokkumakkalkatchi', 'ulzaipalimakkalkatchy', 'unitedrepublicanpartyofindia',
-    'aanaithinthiyajananayakapathukappukazhagam', 'allindiajananayakamakkalkazhagam', 'ambedkariteepartyofindia',
-    'annapuratchithalaivarammadravidamunnetrakazhagam', 'chennaiyouthparty', 'dhesiyamakkalkazhagam',
-    'jebamaniijanata', 'mahathamamakkalmunnetrakazhakam', 'rashtriyasamajpaksha',
-    'socialistunitycentreofinddiacommunist', 'tamilagamakkalthannurimaikatchi', 'tamilarmakkalkatchi',
-    'tamilmanilamurpokkudravidakazhagam', 'ahimsasocialistparty', 'allindiauzhavargaluzhaippalargalkatchi',
-    'allindiayouthdevelopmentparty', 'anaithuindiamakkalkatchi', 'annamakkalkatchi', 'hindhusamajparty',
-    'hindustanjantaparty', 'humanityforpeaceparty', 'karunaaduparty', 'makkalnanalakazhagam', 'makkalnnalvaazhvukkatchi',
-    'naamindiiarparty', 'namindianaamindiiyarkatchi', 'nationalmhahasabhaparty', 'newgenerationpeoplesparty',
-    'punnagaidesamparty', 'republicanpartyofindiasivaraj', 'tamilagamakkalnanalakatchi', 'tipusultanparty',
-    'vidiyalaithedumiindhiyargalparty', 'vidhuthalaikkalamkatchi', 'veeraththiyagiviswanathadossthozhilalarkalkkatchi',
-    'anticorruptiondynamicparty', 'tamilnadumakkalnalvazhvuperiyakkam', 'socialistunitycentreOfindiacommunist',
-    'jebamanijanata', 'mahathmamakkalmunnetrakazhakam', 'aravormunnetrakazhagam', 'tamizhagamurpokkumakkalkatchi',
-    'nationalmahasabhaparty', 'tamilmaanilacongressmoopanar', 'samaniyamakkalnalakatchi', 'vidhuthalaikkalamkatchi',
-    'ambedkariteepartyofindia', 'newgenerationpeoplesparty', 'puthiyamakkaltamildesamkatchi', 'vidiyalaithedumiindhiyargalparty',
-    'ammamakkalmunnettrakazagam', 'naamindiiarparty', 'makkalnnalvaazhvukkatchi', 'namindianaamindiyarkatchi',
-    'makkalnanalakazhagam', 'hindhusamajparty', 'tamilagamakkalnanalakatchi', 'allindiapeopledevelopmentparty',
-    'socialisunitycentreofindiacommunist', 'viduthalaikalamkatchi', 'ambedkaritepartyofindia', "newgenerationpeople'sparty",
-    'puthiyamakkalttamilddesamkatchi', 'vidiyalaithedumindhiyargalparty', 'naamindiarparty', 'makkalnalvaazhvukkatchi',
-    'makkalnalakazhagam', 'hindusamajparty', 'tamilagamakkalnalakatchi'
-     
+        'communistpartyofindia', 'communistpartyofindiamarxist', 'viduthalaichiruthaigalkatchi',
+        'indianunionmuslimleague', 'marumalarchidravidamunnetrakazhagam',
+        'allindiaannadravidamunnetrakazhagam', 'puthiyatamilagam', 'socialdemocraticpartyofindia',
+        'desiyamurpokkudravidakazhagam', 'bharatiyajanataparty', 'indhiyajananayagakatchi',
+        'inthiyamakkalkalvimunnetrakazhagam', 'puthiyaneedhikatchi', 'tamizhagamakkalmunnetrakazhagam',
+        'pattalimakkalkatchi', 'tamilmaaniliacongressmoopanar', 'ammamakkalmunnettrakzagam',
+        'bahujansamajparty', 'naamtamilarkatchi', 'naadaalummakkalkatchi', 'desiyamakkalsakthikatchi',
+        'veeraththiyagivishwanatadhossthozhhialalarkalkkatchi', 'ganasangampartyofindia', 'bahujandravidaparty',
+        'thakkamkatchi', 'virokevirindianparty', 'annamgrdravidamakkalkalgam', 'aravoormunnetrakazhagam',
+        'samaniyamakkalnanalakatchi', 'bharatiyaprajaaikyataparty', 'puthiyamakkalttamilddesamkatchi',
+        'tamizhhagamurpokkumakkalkatchi', 'ulzaipalimakkalkatchy', 'unitedrepublicanpartyofindia',
+        'aanaithinthiyajananayakapathukappukazhagam', 'allindiajananayakamakkalkazhagam', 'ambedkariteepartyofindia',
+        'annapuratchithalaivarammadravidamunnetrakazhagam', 'chennaiyouthparty', 'dhesiyamakkalkazhagam',
+        'jebamaniijanata', 'mahathamamakkalmunnetrakazhakam', 'rashtriyasamajpaksha',
+        'socialistunitycentreofinddiacommunist', 'tamilagamakkalthannurimaikatchi', 'tamilarmakkalkatchi',
+        'tamilmanilamurpokkudravidakazhagam', 'ahimsasocialistparty', 'allindiauzhavargaluzhaippalargalkatchi',
+        'allindiayouthdevelopmentparty', 'anaithuindiamakkalkatchi', 'annamakkalkatchi', 'hindhusamajparty',
+        'hindustanjantaparty', 'humanityforpeaceparty', 'karunaaduparty', 'makkalnanalakazhagam', 'makkalnnalvaazhvukkatchi',
+        'naamindiiarparty', 'namindianaamindiiyarkatchi', 'nationalmhahasabhaparty', 'newgenerationpeoplesparty',
+        'punnagaidesamparty', 'republicanpartyofindiasivaraj', 'tamilagamakkalnanalakatchi', 'tipusultanparty',
+        'vidiyalaithedumiindhiyargalparty', 'vidhuthalaikkalamkatchi', 'veeraththiyagiviswanathadossthozhilalarkalkkatchi',
+        'anticorruptiondynamicparty', 'tamilnadumakkalnalvazhvuperiyakkam', 'socialistunitycentreOfindiacommunist',
+        'jebamanijanata', 'mahathmamakkalmunnetrakazhakam', 'aravormunnetrakazhagam', 'tamizhagamurpokkumakkalkatchi',
+        'nationalmahasabhaparty', 'tamilmaanilacongressmoopanar', 'samaniyamakkalnalakatchi', 'vidhuthalaikkalamkatchi',
+        'ambedkariteepartyofindia', 'newgenerationpeoplesparty', 'puthiyamakkaltamildesamkatchi', 'vidiyalaithedumiindhiyargalparty',
+        'ammamakkalmunnettrakazagam', 'naamindiiarparty', 'makkalnnalvaazhvukkatchi', 'namindianaamindiyarkatchi',
+        'makkalnanalakazhagam', 'hindhusamajparty', 'tamilagamakkalnanalakatchi', 'allindiapeopledevelopmentparty',
+        'socialisunitycentreofindiacommunist', 'viduthalaikalamkatchi', 'ambedkaritepartyofindia', "newgenerationpeople'sparty",
+        'puthiyamakkalttamilddesamkatchi', 'vidiyalaithedumindhiyargalparty', 'naamindiarparty', 'makkalnalvaazhvukkatchi',
+        'makkalnalakazhagam', 'hindusamajparty', 'tamilagamakkalnalakatchi'
     ];
 
     // Populate party list
@@ -51,6 +51,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const alliance1 = document.getElementById('alliance1');
     const alliance2 = document.getElementById('alliance2');
 
+    function createDraggableParty(partyName) {
+        const partyDiv = document.createElement('div');
+        partyDiv.className = 'draggable';
+        partyDiv.textContent = partyName;
+        partyDiv.draggable = true;
+        partyDiv.addEventListener('dragstart', (event) => {
+            event.dataTransfer.setData('text/plain', event.target.textContent);
+        });
+        partyDiv.addEventListener('dblclick', (event) => {
+            event.preventDefault();
+            event.target.remove();
+        });
+        return partyDiv;
+    }
+
     [alliance1, alliance2].forEach(alliance => {
         alliance.addEventListener('dragover', (event) => {
             event.preventDefault();
@@ -59,11 +74,14 @@ document.addEventListener('DOMContentLoaded', () => {
         alliance.addEventListener('drop', (event) => {
             event.preventDefault();
             const data = event.dataTransfer.getData('text/plain');
-            const droppedParty = document.createElement('div');
-            droppedParty.textContent = data;
-            droppedParty.className = 'draggable'; // Ensure dropped party remains draggable
-            droppedParty.draggable = true;
+            const droppedParty = createDraggableParty(data);
             alliance.appendChild(droppedParty);
+        });
+
+        alliance.addEventListener('dblclick', (event) => {
+            if (event.target.classList.contains('draggable')) {
+                event.target.remove();
+            }
         });
     });
 
@@ -239,7 +257,7 @@ document.addEventListener('DOMContentLoaded', () => {
             .duration(1000)
             .call(yAxis);
 
-            const chartContainer = document.querySelector('.chart-container');
-            chartContainer.scrollIntoView({ behavior: 'smooth' });
+        const chartContainer = document.querySelector('.chart-container');
+        chartContainer.scrollIntoView({ behavior: 'smooth' });
     }
 });
