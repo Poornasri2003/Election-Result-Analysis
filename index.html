@@ -5,19 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>2024 Election Results Analysis</title>
     <link rel="stylesheet" href="styles.css">
-    <script src="https://d3js.org/d3.v7.min.js"></script>
-    <script src="script.js" defer></script>
 </head>
 <body>
-    <h1>2024 Election Results Analysis</h1>
-    <label for="alliance1">Select parties for Alliance 1:</label>
-    <select id="alliance1" multiple></select>
-
-    <label for="alliance2">Select parties for Alliance 2:</label>
-    <select id="alliance2" multiple></select>
-
-    <button id="submit">Submit</button>
-
+    <div id="app">
+        <div id="sidebar">
+            <h2>Draggable Parties</h2>
+            <div id="draggableParties"></div>
+        </div>
+        <div id="main">
+            <h1>Election Results Analysis</h1>
+            <div id="alliances">
+                <div class="alliance">
+                    <h3>Alliance 1</h3>
+                    <select id="alliance1Select" class="allianceSelect" ondrop="drop(event, 'alliance1Select')" ondragover="allowDrop(event)"></select>
+                </div>
+                <div class="alliance">
+                    <h3>Alliance 2</h3>
+                    <select id="alliance2Select" class="allianceSelect" ondrop="drop(event, 'alliance2Select')" ondragover="allowDrop(event)"></select>
+                </div>
+            </div>
+            <button id="submit">Submit</button>
+        </div>
+    </div>
     <div id="chart"></div>
+
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
