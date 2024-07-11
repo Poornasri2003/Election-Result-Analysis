@@ -1,28 +1,56 @@
 document.addEventListener('DOMContentLoaded', () => {
     const filePath = '2024_results.csv';
+    const alliances = ['alliance1', 'alliance2'];
     const partiesList = [
         'dravidamunnetrakazhagam', 'kongunadumakkaldesiakkatchi', 'indiannationalcongress',
         'communistpartyofindia', 'communistpartyofindiamarxist', 'viduthalaichiruthaigalkatchi',
-        // ... add all other parties here ...
+        'indianunionmuslimleague', 'marumalarchidravidamunnetrakazhagam'
     ];
 
-    // Populate select elements with parties
-    const alliance1Select = document.getElementById('alliance1');
-    const alliance2Select = document.getElementById('alliance2');
+    // Populate party list
+    const draggableParties = document.getElementById('draggableParties');
     partiesList.forEach(party => {
-        const option1 = document.createElement('option');
-        const option2 = document.createElement('option');
-        option1.value = option2.value = party;
-        option1.text = option2.text = party;
-        alliance1Select.appendChild(option1);
-        alliance2Select.appendChild(option2);
+        const partyDiv = document.createElement('div');
+        partyDiv.className = 'draggable';
+        partyDiv.textContent = party;
+        partyDiv.draggable = true;
+        partyDiv.addEventListener('dragstart', (event) => {
+            event.dataTransfer.setData('text/plain', event.target.textContent);
+        });
+        draggableParties.appendChild(partyDiv);
+    });
+
+    alliances.forEach(allianceId => {
+        const allianceSelect = document.getElementById(`${allianceId}Select`);
+
+        allianceSelect.addEventListener('dragover', (event) => {
+            event.preventDefault();
+        });
+
+        allianceSelect.addEventListener('drop', (event) => {
+            event.preventDefault();
+            const data = event.dataTransfer.getData('text/plain');
+            const option = document.createElement('option');
+            option.value = option.text = data;
+            allianceSelect.appendChild(option); // Append to the alliance select box
+        });
     });
 
     // Event listener for submit button
-    document.getElementById('submit').addEventListener('click', () => {
-        const selectedPartiesAlliance1 = Array.from(alliance1Select.selectedOptions).map(option => option.value);
-        const selectedPartiesAlliance2 = Array.from(alliance2Select.selectedOptions).map(option => option.value);
-        fetchCSVData(filePath).then(data => {
+    document.getElementById('submit').addEventListener('click', async () => {
+        const alliance1Select = document.getElementById('alliance1Select');
+        const alliance2Select = document.getElementById('alliance2Select');
+
+        if (!alliance1Select || !alliance2Select) {
+            console.error('Alliance select elements not found.');
+            return;
+        }
+
+        const selectedPartiesAlliance1 = Array.from(alliance1Select.options || []).map(option => option.value);
+        const selectedPartiesAlliance2 = Array.from(alliance2Select.options || []).map(option => option.value);
+
+        try {
+            const data = await fetchCSVData(filePath);
             if (data) {
                 const processedData = processCSVData(data, selectedPartiesAlliance1, selectedPartiesAlliance2);
                 if (processedData) {
@@ -33,7 +61,9 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 alert('CSV file not found.');
             }
-        });
+        } catch (error) {
+            console.error('Error fetching or processing CSV data:', error);
+        }
     });
 
     // Fetch CSV data
@@ -49,24 +79,26 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Process CSV data
-    function processCSVData(data, alliance1, alliance2) {
-        const filteredData = data.map(row => ({
-            ward: row.ward.replace(/\s|\(|\)/g, '').toLowerCase(),
-            party: row.party.replace(/\s/g, '').toLowerCase(),
-            votes: parseInt(row.votes, 10)
-        }));
+   // Process CSV data
+function processCSVData(data, alliance1, alliance2) {
+    const filteredData = data.map(row => ({
+        ward: row.ward.replace(/\s|\(|\)/g, '').toLowerCase(),
+        party: row.party.replace(/\s/g, '').toLowerCase(),
+        votes: parseInt(row.votes, 10)
+    }));
 
-        const alliance1Data = filteredData.filter(row => alliance1.includes(row.party));
-        const alliance2Data = filteredData.filter(row => alliance2.includes(row.party));
+    const alliance1Data = filteredData.filter(row => alliance1.includes(row.party));
+    const alliance2Data = filteredData.filter(row => alliance2.includes(row.party));
 
-        if (alliance1Data.length === 0 || alliance2Data.length === 0) return null;
+    if (alliance1Data.length === 0 || alliance2Data.length === 0) return null;
 
-        const wards = [...new Set(filteredData.map(row => row.ward))];
-        const alliance1Votes = wards.map(ward => alliance1Data.filter(row => row.ward === ward).reduce((sum, row) => sum + row.votes, 0));
-        const alliance2Votes = wards.map(ward => alliance2Data.filter(row => row.ward === ward).reduce((sum, row) => sum + row.votes, 0));
+    const wards = [...new Set(filteredData.map(row => row.ward))];
+    const alliance1Votes = wards.map(ward => alliance1Data.filter(row => row.ward === ward).reduce((sum, row) => sum + row.votes, 0));
+    const alliance2Votes = wards.map(ward => alliance2Data.filter(row => row.ward === ward).reduce((sum, row) => sum + row.votes, 0));
 
-        return { wards, alliance1Votes, alliance2Votes, alliance1Labels: alliance1.join(', '), alliance2Labels: alliance2.join(', ') };
-    }
+    return { wards, alliance1Votes, alliance2Votes, alliance1Labels: alliance1.join(', '), alliance2Labels: alliance2.join(', ') };
+}
+
 
     // Render chart using D3.js
     function renderChart({ wards, alliance1Votes, alliance2Votes, alliance1Labels, alliance2Labels }) {
@@ -155,5 +187,22 @@ document.addEventListener('DOMContentLoaded', () => {
             .attr('y', 9.5)
             .attr('dy', '0.32em')
             .text(d => d);
+    }
+
+    // Drag and Drop functionality
+    window.allowDrop = function allowDrop(ev) {
+        ev.preventDefault();
+    }
+
+    window.drag = function drag(ev) {
+        ev.dataTransfer.setData("text", ev.target.textContent);
+    }
+
+    window.drop = function drop(ev, targetId) {
+        ev.preventDefault();
+        const data = ev.dataTransfer.getData("text");
+        const option = document.createElement('option');
+        option.value = option.text = data;
+        document.getElementById(targetId).appendChild(option);
     }
 });
