@@ -1,57 +1,109 @@
 body {
     font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 0;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    margin: 0;
-    background-color: #f0f0f0;
+    min-height: 100vh;
+    flex-direction: column; /* Adjusted to column layout */
 }
 
-#app {
+.container {
     display: flex;
-    background-color: #fff;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-#sidebar {
-    flex: 1;
-    padding: 20px;
-}
-
-#draggableParties {
+    justify-content: space-around;
+    align-items: flex-start;
+    width: 90%;
+    max-width: 1200px;
+    background-color: white;
     border: 1px solid #ccc;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    border-radius: 5px;
+    margin-top: 20px;
+}
+
+.left {
+    flex: 1;
+    padding-right: 20px;
+    border-right: 1px solid #ccc;
+    overflow-y: auto; /* Added to enable scrolling */
+}
+
+.right {
+    flex: 1;
+    padding-left: 20px;
+}
+
+h2 {
+    margin-top: 0;
+    font-size: 1.5em;
+}
+
+.draggable-container {
+    border: 1px solid #ccc;
+    border-radius: 5px;
     padding: 10px;
-    max-height: 300px;
+    background-color: #f9f9f9;
+    max-height: 400px;
     overflow-y: auto;
 }
 
 .draggable {
-    cursor: move;
-    padding: 5px 10px;
     margin: 5px;
-    border: 1px solid #ddd;
+    padding: 8px 12px;
+    background-color: #e0e0e0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.draggable:hover {
+    background-color: #d0d0d0;
+}
+
+.droppable-container {
+    border: 1px dashed #ccc;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    padding: 10px;
+    min-height: 100px;
     background-color: #f9f9f9;
 }
 
-#main {
-    flex: 2;
-    padding: 20px;
-}
-
-.alliance {
-    margin-bottom: 20px;
-}
-
-.alliance h3 {
-    margin-top: 0;
-}
-
-.allianceSelect {
+.chart-container {
     width: 100%;
-    padding: 10px;
+    text-align: center;
+    margin-top: 20px;
+    height: 100%;
 }
 
 #chart {
-    margin-top: 20px;
+    display: inline-block;
+    background-color: white; /* Added background color for clarity */
+    padding: 20px; /* Added padding for better visualization */
+}
+
+button {
+    display: block;
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+input[type="text"] {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
 }
