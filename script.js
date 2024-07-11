@@ -1,10 +1,37 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const filePath = '2024_results.csv';
-    const alliances = ['alliance1', 'alliance2'];
     const partiesList = [
         'dravidamunnetrakazhagam', 'kongunadumakkaldesiakkatchi', 'indiannationalcongress',
-        'communistpartyofindia', 'communistpartyofindiamarxist', 'viduthalaichiruthaigalkatchi',
-        'indianunionmuslimleague', 'marumalarchidravidamunnetrakazhagam'
+    'communistpartyofindia', 'communistpartyofindiamarxist', 'viduthalaichiruthaigalkatchi',
+    'indianunionmuslimleague', 'marumalarchidravidamunnetrakazhagam',
+    'allindiaannadravidamunnetrakazhagam', 'puthiyatamilagam', 'socialdemocraticpartyofindia',
+    'desiyamurpokkudravidakazhagam', 'bharatiyajanataparty', 'indhiyajananayagakatchi',
+    'inthiyamakkalkalvimunnetrakazhagam', 'puthiyaneedhikatchi', 'tamizhagamakkalmunnetrakazhagam',
+    'pattalimakkalkatchi', 'tamilmaaniliacongressmoopanar', 'ammamakkalmunnettrakzagam',
+    'bahujansamajparty', 'naamtamilarkatchi', 'naadaalummakkalkatchi', 'desiyamakkalsakthikatchi',
+    'veeraththiyagivishwanatadhossthozhhialalarkalkkatchi', 'ganasangampartyofindia', 'bahujandravidaparty',
+    'thakkamkatchi', 'virokevirindianparty', 'annamgrdravidamakkalkalgam', 'aravoormunnetrakazhagam',
+    'samaniyamakkalnanalakatchi', 'bharatiyaprajaaikyataparty', 'puthiyamakkalttamilddesamkatchi',
+    'tamizhhagamurpokkumakkalkatchi', 'ulzaipalimakkalkatchy', 'unitedrepublicanpartyofindia',
+    'aanaithinthiyajananayakapathukappukazhagam', 'allindiajananayakamakkalkazhagam', 'ambedkariteepartyofindia',
+    'annapuratchithalaivarammadravidamunnetrakazhagam', 'chennaiyouthparty', 'dhesiyamakkalkazhagam',
+    'jebamaniijanata', 'mahathamamakkalmunnetrakazhakam', 'rashtriyasamajpaksha',
+    'socialistunitycentreofinddiacommunist', 'tamilagamakkalthannurimaikatchi', 'tamilarmakkalkatchi',
+    'tamilmanilamurpokkudravidakazhagam', 'ahimsasocialistparty', 'allindiauzhavargaluzhaippalargalkatchi',
+    'allindiayouthdevelopmentparty', 'anaithuindiamakkalkatchi', 'annamakkalkatchi', 'hindhusamajparty',
+    'hindustanjantaparty', 'humanityforpeaceparty', 'karunaaduparty', 'makkalnanalakazhagam', 'makkalnnalvaazhvukkatchi',
+    'naamindiiarparty', 'namindianaamindiiyarkatchi', 'nationalmhahasabhaparty', 'newgenerationpeoplesparty',
+    'punnagaidesamparty', 'republicanpartyofindiasivaraj', 'tamilagamakkalnanalakatchi', 'tipusultanparty',
+    'vidiyalaithedumiindhiyargalparty', 'vidhuthalaikkalamkatchi', 'veeraththiyagiviswanathadossthozhilalarkalkkatchi',
+    'anticorruptiondynamicparty', 'tamilnadumakkalnalvazhvuperiyakkam', 'socialistunitycentreOfindiacommunist',
+    'jebamanijanata', 'mahathmamakkalmunnetrakazhakam', 'aravormunnetrakazhagam', 'tamizhagamurpokkumakkalkatchi',
+    'nationalmahasabhaparty', 'tamilmaanilacongressmoopanar', 'samaniyamakkalnalakatchi', 'vidhuthalaikkalamkatchi',
+    'ambedkariteepartyofindia', 'newgenerationpeoplesparty', 'puthiyamakkaltamildesamkatchi', 'vidiyalaithedumiindhiyargalparty',
+    'ammamakkalmunnettrakazagam', 'naamindiiarparty', 'makkalnnalvaazhvukkatchi', 'namindianaamindiyarkatchi',
+    'makkalnanalakazhagam', 'hindhusamajparty', 'tamilagamakkalnanalakatchi', 'allindiapeopledevelopmentparty',
+    'socialisunitycentreofindiacommunist', 'viduthalaikalamkatchi', 'ambedkaritepartyofindia', "newgenerationpeople'sparty",
+    'puthiyamakkalttamilddesamkatchi', 'vidiyalaithedumindhiyargalparty', 'naamindiarparty', 'makkalnalvaazhvukkatchi',
+    'makkalnalakazhagam', 'hindusamajparty', 'tamilagamakkalnalakatchi'
+     
     ];
 
     // Populate party list
@@ -20,39 +47,38 @@ document.addEventListener('DOMContentLoaded', () => {
         draggableParties.appendChild(partyDiv);
     });
 
-    alliances.forEach(allianceId => {
-        const allianceSelect = document.getElementById(`${allianceId}Select`);
+    // Event listeners for drop zones
+    const alliance1 = document.getElementById('alliance1');
+    const alliance2 = document.getElementById('alliance2');
 
-        allianceSelect.addEventListener('dragover', (event) => {
+    [alliance1, alliance2].forEach(alliance => {
+        alliance.addEventListener('dragover', (event) => {
             event.preventDefault();
         });
 
-        allianceSelect.addEventListener('drop', (event) => {
+        alliance.addEventListener('drop', (event) => {
             event.preventDefault();
             const data = event.dataTransfer.getData('text/plain');
-            const option = document.createElement('option');
-            option.value = option.text = data;
-            allianceSelect.appendChild(option); // Append to the alliance select box
+            const droppedParty = document.createElement('div');
+            droppedParty.textContent = data;
+            droppedParty.className = 'draggable'; // Ensure dropped party remains draggable
+            droppedParty.draggable = true;
+            alliance.appendChild(droppedParty);
         });
     });
 
-    // Event listener for submit button
+    // Submit button listener
     document.getElementById('submit').addEventListener('click', async () => {
-        const alliance1Select = document.getElementById('alliance1Select');
-        const alliance2Select = document.getElementById('alliance2Select');
-
-        if (!alliance1Select || !alliance2Select) {
-            console.error('Alliance select elements not found.');
-            return;
-        }
-
-        const selectedPartiesAlliance1 = Array.from(alliance1Select.options || []).map(option => option.value);
-        const selectedPartiesAlliance2 = Array.from(alliance2Select.options || []).map(option => option.value);
+        const alliance1Parties = Array.from(alliance1.children).map(child => child.textContent);
+        const alliance2Parties = Array.from(alliance2.children).map(child => child.textContent);
+        console.log('Alliance 1:', alliance1Parties);
+        console.log('Alliance 2:', alliance2Parties);
 
         try {
+            const filePath = '2024_results.csv';
             const data = await fetchCSVData(filePath);
             if (data) {
-                const processedData = processCSVData(data, selectedPartiesAlliance1, selectedPartiesAlliance2);
+                const processedData = processCSVData(data, alliance1Parties, alliance2Parties);
                 if (processedData) {
                     renderChart(processedData);
                 } else {
@@ -79,34 +105,32 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Process CSV data
-   // Process CSV data
-function processCSVData(data, alliance1, alliance2) {
-    const filteredData = data.map(row => ({
-        ward: row.ward.replace(/\s|\(|\)/g, '').toLowerCase(),
-        party: row.party.replace(/\s/g, '').toLowerCase(),
-        votes: parseInt(row.votes, 10)
-    }));
+    function processCSVData(data, alliance1Parties, alliance2Parties) {
+        const filteredData = data.map(row => ({
+            ward: row.ward.replace(/\s|\(|\)/g, '').toLowerCase(),
+            party: row.party.replace(/\s/g, '').toLowerCase(),
+            votes: parseInt(row.votes, 10)
+        }));
 
-    const alliance1Data = filteredData.filter(row => alliance1.includes(row.party));
-    const alliance2Data = filteredData.filter(row => alliance2.includes(row.party));
+        const alliance1Data = filteredData.filter(row => alliance1Parties.includes(row.party));
+        const alliance2Data = filteredData.filter(row => alliance2Parties.includes(row.party));
 
-    if (alliance1Data.length === 0 || alliance2Data.length === 0) return null;
+        if (alliance1Data.length === 0 || alliance2Data.length === 0) return null;
 
-    const wards = [...new Set(filteredData.map(row => row.ward))];
-    const alliance1Votes = wards.map(ward => alliance1Data.filter(row => row.ward === ward).reduce((sum, row) => sum + row.votes, 0));
-    const alliance2Votes = wards.map(ward => alliance2Data.filter(row => row.ward === ward).reduce((sum, row) => sum + row.votes, 0));
+        const wards = [...new Set(filteredData.map(row => row.ward))];
+        const alliance1Votes = wards.map(ward => alliance1Data.filter(row => row.ward === ward).reduce((sum, row) => sum + row.votes, 0));
+        const alliance2Votes = wards.map(ward => alliance2Data.filter(row => row.ward === ward).reduce((sum, row) => sum + row.votes, 0));
 
-    return { wards, alliance1Votes, alliance2Votes, alliance1Labels: alliance1.join(', '), alliance2Labels: alliance2.join(', ') };
-}
-
+        return { wards, alliance1Votes, alliance2Votes, alliance1Labels: alliance1Parties.join(', '), alliance2Labels: alliance2Parties.join(', ') };
+    }
 
     // Render chart using D3.js
     function renderChart({ wards, alliance1Votes, alliance2Votes, alliance1Labels, alliance2Labels }) {
         d3.select('#chart').html('');  // Clear previous chart
 
-        const width = 1000;  // Increased width to accommodate more wards
-        const height = 600;
-        const margin = { top: 20, right: 20, bottom: 100, left: 50 };  // Adjusted margin to accommodate rotated labels
+        const width = 800;  // Adjusted width for a more centered appearance
+        const height = 500;
+        const margin = { top: 20, right: 20, bottom: 50, left: 50 };
 
         const svg = d3.select('#chart')
             .append('svg')
@@ -116,93 +140,106 @@ function processCSVData(data, alliance1, alliance2) {
             .attr('transform', `translate(${margin.left},${margin.top})`);
 
         const x = d3.scaleBand()
-            .range([0, width])
             .domain(wards)
+            .range([0, width])
             .padding(0.1);
 
         const y = d3.scaleLinear()
-            .range([height, 0])
-            .domain([0, d3.max([...alliance1Votes, ...alliance2Votes])]);
+            .domain([0, d3.max([...alliance1Votes, ...alliance2Votes])])
+            .nice()
+            .range([height, 0]);
+
+        const xAxis = d3.axisBottom(x);
+        const yAxis = d3.axisLeft(y);
+
+        svg.append('g')
+            .attr('transform', `translate(0,${height})`)
+            .call(xAxis)
+            .selectAll('text')
+            .style('text-anchor', 'end')
+            .attr('transform', 'rotate(-45)');
+
+        svg.append('g')
+            .call(yAxis);
+
+        const barWidth = x.bandwidth() / 2;
 
         svg.selectAll('.bar1')
             .data(alliance1Votes)
             .enter().append('rect')
             .attr('class', 'bar1')
-            .attr('x', (d, i) => x(wards[i]) - x.bandwidth() / 4)
-            .attr('width', x.bandwidth() / 2)
+            .attr('x', (d, i) => x(wards[i]) - barWidth / 2)
             .attr('y', d => y(d))
+            .attr('width', barWidth)
             .attr('height', d => height - y(d))
-            .attr('fill', 'steelblue');
+            .attr('fill', '#007bff');
 
         svg.selectAll('.bar2')
             .data(alliance2Votes)
             .enter().append('rect')
             .attr('class', 'bar2')
-            .attr('x', (d, i) => x(wards[i]) + x.bandwidth() / 4)
-            .attr('width', x.bandwidth() / 2)
+            .attr('x', (d, i) => x(wards[i]) + barWidth / 2)
             .attr('y', d => y(d))
+            .attr('width', barWidth)
             .attr('height', d => height - y(d))
-            .attr('fill', 'orange');
-
-        svg.append('g')
-            .attr('transform', `translate(0,${height})`)
-            .call(d3.axisBottom(x))
-            .selectAll('text')
-            .attr('transform', 'rotate(-45)')
-            .style('text-anchor', 'end');
-
-        svg.append('g')
-            .call(d3.axisLeft(y));
+            .attr('fill', '#28a745');
 
         svg.append('text')
-            .attr('transform', 'rotate(-90)')
-            .attr('y', 0 - margin.left)
-            .attr('x', 0 - height / 2)
-            .attr('dy', '1em')
-            .style('text-anchor', 'middle')
-            .text('Votes Count');
-
-        svg.append('text')
-            .attr('transform', `translate(${width / 2},${height + margin.bottom - 40})`)
-            .style('text-anchor', 'middle')
+            .attr('x', width / 2)
+            .attr('y', height + margin.top + 20)
+            .attr('text-anchor', 'middle')
             .text('Wards');
 
-        const legend = svg.append('g')
-            .attr('font-family', 'sans-serif')
-            .attr('font-size', 10)
-            .attr('text-anchor', 'end')
-            .selectAll('g')
-            .data([`Alliance 1 - ${alliance1Labels}`, `Alliance 2 - ${alliance2Labels}`])
-            .enter().append('g')
-            .attr('transform', (d, i) => `translate(0,${i * 20})`);
+        svg.append('text')
+            .attr('x', -height / 2)
+            .attr('y', -margin.left + 20)
+            .attr('transform', 'rotate(-90)')
+            .attr('text-anchor', 'middle')
+            .text('Votes');
 
-        legend.append('rect')
-            .attr('x', width - 19)
-            .attr('width', 19)
-            .attr('height', 19)
-            .attr('fill', (d, i) => i === 0 ? 'steelblue' : 'orange');
+        svg.append('text')
+            .attr('x', width / 2)
+            .attr('y', -10)
+            .attr('text-anchor', 'middle')
+            .style('font-size', '1.5em')
+            .text('2024 Election Results');
 
-        legend.append('text')
-            .attr('x', width - 24)
-            .attr('y', 9.5)
-            .attr('dy', '0.32em')
-            .text(d => d);
-    }
+        svg.append('text')
+            .attr('x', width / 2)
+            .attr('y', height + margin.top + 40)
+            .attr('text-anchor', 'middle')
+            .style('font-size', '0.8em')
+            .text(`Alliance 1: ${alliance1Labels}`);
 
-    // Drag and Drop functionality
-    window.allowDrop = function allowDrop(ev) {
-        ev.preventDefault();
-    }
+        svg.append('text')
+            .attr('x', width / 2)
+            .attr('y', height + margin.top + 60)
+            .attr('text-anchor', 'middle')
+            .style('font-size', '0.8em')
+            .text(`Alliance 2: ${alliance2Labels}`);
 
-    window.drag = function drag(ev) {
-        ev.dataTransfer.setData("text", ev.target.textContent);
-    }
+        svg.selectAll('.bar1, .bar2')
+            .transition()
+            .duration(1000)
+            .attr('y', d => y(d))
+            .attr('height', d => height - y(d));
 
-    window.drop = function drop(ev, targetId) {
-        ev.preventDefault();
-        const data = ev.dataTransfer.getData("text");
-        const option = document.createElement('option');
-        option.value = option.text = data;
-        document.getElementById(targetId).appendChild(option);
+        svg.selectAll('text')
+            .transition()
+            .duration(1000);
+
+        // Animate axis
+        svg.select('.x.axis')
+            .transition()
+            .duration(1000)
+            .call(xAxis);
+
+        svg.select('.y.axis')
+            .transition()
+            .duration(1000)
+            .call(yAxis);
+
+            const chartContainer = document.querySelector('.chart-container');
+            chartContainer.scrollIntoView({ behavior: 'smooth' });
     }
 });
