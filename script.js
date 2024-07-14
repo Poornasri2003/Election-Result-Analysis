@@ -151,6 +151,8 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('reset').addEventListener('click', () => {
         alliance1.innerHTML = '<h3>Alliance 1</h3><span class="placeholder">Drag and drop parties here</span>';
         alliance2.innerHTML = '<h3>Alliance 2</h3><span class="placeholder">Drag and drop parties here</span>';
+        chart=document.getElementById('chart');
+        chart.innerHTML = '';
     });
 
     // Submit button
