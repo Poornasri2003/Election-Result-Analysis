@@ -35,16 +35,41 @@ document.addEventListener('DOMContentLoaded', () => {
     ];
 
     // Populate party list
+
     const draggableParties = document.getElementById('draggableParties');
-    partiesList.forEach(party => {
-        const partyDiv = document.createElement('div');
-        partyDiv.className = 'draggable';
-        partyDiv.textContent = party;
-        partyDiv.draggable = true;
-        partyDiv.addEventListener('dragstart', (event) => {
-            event.dataTransfer.setData('text/plain', event.target.textContent);
+
+    // Function to populate the party list
+    function populatePartyList(parties) {
+        draggableParties.innerHTML = ''; // Clear previous list
+
+        parties.forEach(party => {
+            const partyDiv = document.createElement('div');
+            partyDiv.className = 'draggable';
+            partyDiv.textContent = party;
+            partyDiv.draggable = true;
+            partyDiv.addEventListener('dragstart', (event) => {
+                event.dataTransfer.setData('text/plain', event.target.textContent);
+            });
+            draggableParties.appendChild(partyDiv);
         });
-        draggableParties.appendChild(partyDiv);
+    }
+
+    // Initial population of party list
+    populatePartyList(partiesList);
+
+    // Search functionality
+    document.getElementById('search').addEventListener('input', (event) => {
+        const searchText = event.target.value.toLowerCase().trim();
+
+        if (!searchText) {
+            // If search is empty, show all parties
+            populatePartyList(partiesList);
+        } else {
+            const filteredParties = partiesList.filter(party =>
+                party.toLowerCase().includes(searchText)
+            );
+            populatePartyList(filteredParties);
+        }
     });
 
     // Event listeners for drop zones
