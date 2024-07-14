@@ -35,13 +35,21 @@ document.addEventListener('DOMContentLoaded', () => {
     ];
 
     // Populate party list
-
     const draggableParties = document.getElementById('draggableParties');
-
-    // Function to populate the party list
+    partiesList.forEach(party => {
+        const partyDiv = document.createElement('div');
+        partyDiv.className = 'draggable';
+        partyDiv.textContent = party;
+        partyDiv.draggable = true;
+        partyDiv.addEventListener('dragstart', (event) => {
+            event.dataTransfer.setData('text/plain', event.target.textContent);
+        });
+        draggableParties.appendChild(partyDiv);
+    });
     function populatePartyList(parties) {
+        const draggableParties = document.getElementById('draggableParties');
         draggableParties.innerHTML = ''; // Clear previous list
-
+    
         parties.forEach(party => {
             const partyDiv = document.createElement('div');
             partyDiv.className = 'draggable';
@@ -53,11 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
             draggableParties.appendChild(partyDiv);
         });
     }
-
-    // Initial population of party list
-    populatePartyList(partiesList);
-
-    // Search functionality
+    
     document.getElementById('search').addEventListener('input', (event) => {
         const searchText = event.target.value.toLowerCase().trim();
 
@@ -71,7 +75,6 @@ document.addEventListener('DOMContentLoaded', () => {
             populatePartyList(filteredParties);
         }
     });
-
     // Event listeners for drop zones
     const alliance1 = document.getElementById('alliance1');
     const alliance2 = document.getElementById('alliance2');
