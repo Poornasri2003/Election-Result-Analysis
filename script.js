@@ -239,7 +239,8 @@ function processCSVData(data, alliance1Parties, alliance2Parties) {
 }
 
 // Render chart using D3.js
-function renderChart({ wards, alliance1Votes, alliance2Votes, alliance1Labels, alliance2Labels }) {
+
+    function renderChart({ wards, alliance1Votes, alliance2Votes, alliance1Labels, alliance2Labels }) {
     d3.select('#chart').html(''); // Clear previous chart
 
     const width = 800; // Adjusted width for a more centered appearance
@@ -278,6 +279,9 @@ function renderChart({ wards, alliance1Votes, alliance2Votes, alliance1Labels, a
 
     const barWidth = x.bandwidth() / 2;
 
+    // Create tooltip
+    const tooltip = d3.select('#tooltip');
+
     // Render bars for Alliance 1
     svg.selectAll('.bar1')
         .data(alliance1Votes)
@@ -287,7 +291,20 @@ function renderChart({ wards, alliance1Votes, alliance2Votes, alliance1Labels, a
         .attr('y', d => y(d))
         .attr('width', barWidth)
         .attr('height', d => height - y(d))
-        .attr('fill', '#007bff');
+        .attr('fill', '#007bff')
+        .on('mouseover', (event, d) => {
+            tooltip.transition()
+                .duration(200)
+                .style('opacity', .9);
+            tooltip.html(`Votes: ${d}`)
+                .style('left', (event.pageX + 5) + 'px')
+                .style('top', (event.pageY - 28) + 'px');
+        })
+        .on('mouseout', () => {
+            tooltip.transition()
+                .duration(500)
+                .style('opacity', 0);
+        });
 
     // Render bars for Alliance 2
     svg.selectAll('.bar2')
@@ -298,7 +315,20 @@ function renderChart({ wards, alliance1Votes, alliance2Votes, alliance1Labels, a
         .attr('y', d => y(d))
         .attr('width', barWidth)
         .attr('height', d => height - y(d))
-        .attr('fill', '#28a745');
+        .attr('fill', '#28a745')
+        .on('mouseover', (event, d) => {
+            tooltip.transition()
+                .duration(200)
+                .style('opacity', .9);
+            tooltip.html(`Votes: ${d}`)
+                .style('left', (event.pageX + 5) + 'px')
+                .style('top', (event.pageY - 28) + 'px');
+        })
+        .on('mouseout', () => {
+            tooltip.transition()
+                .duration(500)
+                .style('opacity', 0);
+        });
 
     svg.append('text')
         .attr('x', width / 2)
@@ -354,7 +384,5 @@ function renderChart({ wards, alliance1Votes, alliance2Votes, alliance1Labels, a
     const chartContainer = document.querySelector('.chart-container');
     chartContainer.scrollIntoView({ behavior: 'smooth' });
 }
-
-
 
 });
