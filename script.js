@@ -225,8 +225,7 @@ function processCSVData(data, alliance1Parties, alliance2Parties) {
     // Remove placeholder text from labels
     const alliance1Labels = alliance1Parties.filter(party => party !== "Drag and drop parties here and to remove Double click");
     const alliance2Labels = alliance2Parties.filter(party => party !== "Drag and drop parties here and to remove Double click");
-    chart=document.getElementById('chart');
-    chart.innerHTML = '';
+
     // Return processed data
     return {
         wards,
