@@ -151,6 +151,8 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('reset').addEventListener('click', () => {
         alliance1.innerHTML = '<h3>Alliance 1</h3><span class="placeholder">Drag and drop parties here</span>';
         alliance2.innerHTML = '<h3>Alliance 2</h3><span class="placeholder">Drag and drop parties here</span>';
+        chart=document.getElementById('chart');
+        chart.innerHTML = '';
     });
 
     // Submit button
@@ -238,11 +240,11 @@ function processCSVData(data, alliance1Parties, alliance2Parties) {
 
 // Render chart using D3.js
 function renderChart({ wards, alliance1Votes, alliance2Votes, alliance1Labels, alliance2Labels }) {
-    d3.select('#chart').html(''); // Clear previous chart
+    d3.select('#chart').html('');
 
-    const width = 800; // Adjusted width for a more centered appearance
+    const width = 800;
     const height = 500;
-    const margin = { top: 50, right: 20, bottom: 50, left: 50 }; // Adjusted top margin for labels
+    const margin = { top: 50, right: 20, bottom: 50, left: 50 };
 
     const svg = d3.select('#chart')
         .append('svg')
@@ -276,7 +278,6 @@ function renderChart({ wards, alliance1Votes, alliance2Votes, alliance1Labels, a
 
     const barWidth = x.bandwidth() / 2;
 
-    // Render bars for Alliance 1
     svg.selectAll('.bar1')
         .data(alliance1Votes)
         .enter().append('rect')
@@ -287,7 +288,6 @@ function renderChart({ wards, alliance1Votes, alliance2Votes, alliance1Labels, a
         .attr('height', d => height - y(d))
         .attr('fill', '#007bff');
 
-    // Render bars for Alliance 2
     svg.selectAll('.bar2')
         .data(alliance2Votes)
         .enter().append('rect')
@@ -300,59 +300,93 @@ function renderChart({ wards, alliance1Votes, alliance2Votes, alliance1Labels, a
 
     svg.append('text')
         .attr('x', width / 2)
-        .attr('y', -margin.top / 2) // Adjusted y position for top alignment
+        .attr('y', -margin.top / 2)
         .attr('text-anchor', 'middle')
         .style('font-size', '1.5em')
         .text('2024 Election Results');
 
-    // Alliance 1 label
-    if (alliance1Labels.length > 0) {
-        svg.append('text')
-            .attr('x', width - 10) // Adjusted x position for right alignment
-            .attr('y', -margin.top / 4) // Adjusted y position for top alignment
-            .style('font-size', '0.8em')
-            .text(`${alliance1Labels.join(', ')}`)
-            .attr('fill', '#007bff')
-            .attr('text-anchor', 'end');
+    function formatLabels(labels, maxWidth) {
+        const formattedLabels = [];
+        let currentLine = [];
+
+        labels.forEach(label => {
+            const testLine = [...currentLine, label].join(', ');
+            const testWidth = testLine.length * 7;
+
+            if (testWidth > maxWidth) {
+                formattedLabels.push(currentLine.join(', '));
+                currentLine = [label];
+            } else {
+                currentLine.push(label);
+            }
+        });
+
+        formattedLabels.push(currentLine.join(', '));
+        return formattedLabels;
     }
 
-    // Alliance 2 label
-    if (alliance2Labels.length > 0) {
-        svg.append('text')
-            .attr('x', width - 10) // Adjusted x position for right alignment
-            .attr('y', -margin.top / 4 + 20) // Adjusted y position for top alignment
-            .style('font-size', '0.8em')
-            .text(`${alliance2Labels.join(', ')}`)
-            .attr('fill', '#28a745')
-            .attr('text-anchor', 'end');
-    }
+    const formattedAlliance1Labels = formatLabels(alliance1Labels, width / 2);
+    const formattedAlliance2Labels = formatLabels(alliance2Labels, width / 2);
 
-    // Animate bars and axis
-    svg.selectAll('.bar1, .bar2')
-        .transition()
-        .duration(1000)
-        .attr('y', d => y(d))
-        .attr('height', d => height - y(d));
+    const tooltip = d3.select('#chart')
+        .append('div')
+        .style('position', 'absolute')
+        .style('visibility', 'hidden')
+        .style('background', 'rgba(0, 0, 0, 0.7)')
+        .style('color', '#fff')
+        .style('padding', '5px')
+        .style('border-radius', '5px');
 
-    svg.selectAll('text')
-        .transition()
-        .duration(1000);
+    svg.selectAll('.bar1')
+        .on('mouseover', (event, d) => {
+            tooltip.html(`Alliance 1: ${d}`)
+                .style('visibility', 'visible')
+                .style('left', `${event.pageX}px`)
+                .style('top', `${event.pageY}px`);
+        })
+        .on('mousemove', event => {
+            tooltip.style('left', `${event.pageX}px`)
+                .style('top', `${event.pageY}px`);
+        })
+        .on('mouseout', () => {
+            tooltip.style('visibility', 'hidden');
+        });
 
-    // Animate axis
-    svg.select('.x.axis')
-        .transition()
-        .duration(1000)
-        .call(xAxis);
+    svg.selectAll('.bar2')
+        .on('mouseover', (event, d) => {
+            tooltip.html(`Alliance 2: ${d}`)
+                .style('visibility', 'visible')
+                .style('left', `${event.pageX}px`)
+                .style('top', `${event.pageY}px`);
+        })
+        .on('mousemove', event => {
+            tooltip.style('left', `${event.pageX}px`)
+                .style('top', `${event.pageY}px`);
+        })
+        .on('mouseout', () => {
+            tooltip.style('visibility', 'hidden');
+        });
 
-    svg.select('.y.axis')
-        .transition()
-        .duration(1000)
-        .call(yAxis);
+    svg.selectAll('.bar1-label')
+        .data(alliance1Votes)
+        .enter().append('text')
+        .attr('class', 'bar1-label')
+        .attr('x', (d, i) => x(wards[i]) - barWidth / 2 + barWidth / 2)
+        .attr('y', d => y(d) - 5)
+        .attr('text-anchor', 'middle')
+        .style('fill', '#000')
+        .style('font-size', '12px')
+        .text(d => d);
 
-    const chartContainer = document.querySelector('.chart-container');
-    chartContainer.scrollIntoView({ behavior: 'smooth' });
+    svg.selectAll('.bar2-label')
+        .data(alliance2Votes)
+        .enter().append('text')
+        .attr('class', 'bar2-label')
+        .attr('x', (d, i) => x(wards[i]) + barWidth / 2 + barWidth / 2)
+        .attr('y', d => y(d) - 5)
+        .attr('text-anchor', 'middle')
+        .style('fill', '#000')
+        .style('font-size', '12px')
+        .text(d => d);
 }
-
-
-
 });
