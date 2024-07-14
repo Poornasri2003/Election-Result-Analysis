@@ -243,8 +243,8 @@ function processCSVData(data, alliance1Parties, alliance2Parties) {
     function renderChart({ wards, alliance1Votes, alliance2Votes, alliance1Labels, alliance2Labels }) {
     d3.select('#chart').html(''); // Clear previous chart
 
-    const width = 800; // Adjusted width for a more centered appearance
-    const height = 500;
+    const width = 1000; // Adjusted width for a more centered appearance
+    const height = 900;
     const margin = { top: 50, right: 20, bottom: 50, left: 50 }; // Adjusted top margin for labels
 
     const svg = d3.select('#chart')
