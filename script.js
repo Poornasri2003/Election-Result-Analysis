@@ -192,197 +192,186 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-// Process CSV data
-function processCSVData(data, alliance1Parties, alliance2Parties) {
-    // Format alliance party names for matching
-    const formattedAlliance1Parties = alliance1Parties.map(party => formatPartyName(party));
-    const formattedAlliance2Parties = alliance2Parties.map(party => formatPartyName(party));
+    // Process CSV data
+    function processCSVData(data, alliance1Parties, alliance2Parties) {
+        // Format alliance party names for matching
+        const formattedAlliance1Parties = alliance1Parties.map(party => formatPartyName(party));
+        const formattedAlliance2Parties = alliance2Parties.map(party => formatPartyName(party));
 
-    // Format party name function
-    function formatPartyName(partyName) {
-        return partyName.trim(); // Adjust to your specific formatting needs
-    }
+        // Format party name function
+        function formatPartyName(partyName) {
+            return partyName.trim(); // Adjust to your specific formatting needs
+        }
 
-    // Filter and process CSV data
-    const filteredData = data.map(row => ({
-        ward: row.ward.replace(/\s|\(|\)/g, '').toLowerCase(),
-        party: formatPartyName(row.party),
-        votes: parseInt(row.votes, 10)
-    }));
+        // Filter and process CSV data
+        const filteredData = data.map(row => ({
+            ward: row.ward.replace(/\s|\(|\)/g, '').toLowerCase(),
+            party: formatPartyName(row.party),
+            votes: parseInt(row.votes, 10)
+        }));
 
-    // Separate data for alliance 1 and alliance 2
-    const alliance1Data = filteredData.filter(row => formattedAlliance1Parties.includes(row.party));
-    const alliance2Data = filteredData.filter(row => formattedAlliance2Parties.includes(row.party));
+        // Separate data for alliance 1 and alliance 2
+        const alliance1Data = filteredData.filter(row => formattedAlliance1Parties.includes(row.party));
+        const alliance2Data = filteredData.filter(row => formattedAlliance2Parties.includes(row.party));
 
-    // Check if data exists for both alliances
-    if (alliance1Data.length === 0 || alliance2Data.length === 0) {
-        return null;
+        // Check if data exists for both alliances
+        if (alliance1Data.length === 0 && alliance2Data.length === 0) {
+            return null;
+        }
+
+        return {
+            alliance1: aggregateVotesByWard(alliance1Data),
+            alliance2: aggregateVotesByWard(alliance2Data),
+        };
     }
 
     // Aggregate votes by ward
-    const wards = [...new Set(filteredData.map(row => row.ward))];
-    const alliance1Votes = wards.map(ward => alliance1Data.filter(row => row.ward === ward).reduce((sum, row) => sum + row.votes, 0));
-    const alliance2Votes = wards.map(ward => alliance2Data.filter(row => row.ward === ward).reduce((sum, row) => sum + row.votes, 0));
+    function aggregateVotesByWard(data) {
+        const aggregatedData = {};
 
-    // Remove placeholder text from labels
-    const alliance1Labels = alliance1Parties.filter(party => party !== "Drag and drop parties here and to remove Double click");
-    const alliance2Labels = alliance2Parties.filter(party => party !== "Drag and drop parties here and to remove Double click");
+        data.forEach(row => {
+            const { ward, votes } = row;
 
-    // Return processed data
-    return {
-        wards,
-        alliance1Votes,
-        alliance2Votes,
-        alliance1Labels,
-        alliance2Labels
-    };
-}
+            if (!aggregatedData[ward]) {
+                aggregatedData[ward] = 0;
+            }
 
-// Render chart using D3.js
-
-    function renderChart({ wards, alliance1Votes, alliance2Votes, alliance1Labels, alliance2Labels }) {
-    d3.select('#chart').html(''); // Clear previous chart
-
-    const width = 1000; // Adjusted width for a more centered appearance
-    const height = 900;
-    const margin = { top: 50, right: 20, bottom: 50, left: 150 }; // Adjusted top margin for labels
-
-    const svg = d3.select('#chart')
-        .append('svg')
-        .attr('width', width + margin.left + margin.right)
-        .attr('height', height + margin.top + margin.bottom)
-        .append('g')
-        .attr('transform', `translate(${margin.left},${margin.top})`);
-
-    const x = d3.scaleBand()
-        .domain(wards)
-        .range([0, width])
-        .padding(0.1);
-
-    const y = d3.scaleLinear()
-        .domain([0, d3.max([...alliance1Votes, ...alliance2Votes])])
-        .nice()
-        .range([height, 0]);
-
-    const xAxis = d3.axisBottom(x);
-    const yAxis = d3.axisLeft(y);
-
-    svg.append('g')
-        .attr('transform', `translate(0,${height})`)
-        .call(xAxis)
-        .selectAll('text')
-        .style('text-anchor', 'end')
-        .attr('transform', 'rotate(-45)');
-
-    svg.append('g')
-        .call(yAxis);
-
-    const barWidth = x.bandwidth() / 2;
-
-    // Create tooltip
-    const tooltip = d3.select('#tooltip');
-
-    // Render bars for Alliance 1
-    svg.selectAll('.bar1')
-        .data(alliance1Votes)
-        .enter().append('rect')
-        .attr('class', 'bar1')
-        .attr('x', (d, i) => x(wards[i]) - barWidth / 2)
-        .attr('y', d => y(d))
-        .attr('width', barWidth)
-        .attr('height', d => height - y(d))
-        .attr('fill', '#007bff')
-        .on('mouseover', (event, d) => {
-            tooltip.transition()
-                .duration(200)
-                .style('opacity', .9);
-            tooltip.html(`Votes: ${d}`)
-                .style('left', (event.pageX + 5) + 'px')
-                .style('top', (event.pageY - 28) + 'px');
-        })
-        .on('mouseout', () => {
-            tooltip.transition()
-                .duration(500)
-                .style('opacity', 0);
+            aggregatedData[ward] += votes;
         });
 
-    // Render bars for Alliance 2
-    svg.selectAll('.bar2')
-        .data(alliance2Votes)
-        .enter().append('rect')
-        .attr('class', 'bar2')
-        .attr('x', (d, i) => x(wards[i]) + barWidth / 2)
-        .attr('y', d => y(d))
-        .attr('width', barWidth)
-        .attr('height', d => height - y(d))
-        .attr('fill', '#28a745')
-        .on('mouseover', (event, d) => {
-            tooltip.transition()
-                .duration(200)
-                .style('opacity', .9);
-            tooltip.html(`Votes: ${d}`)
-                .style('left', (event.pageX + 5) + 'px')
-                .style('top', (event.pageY - 28) + 'px');
-        })
-        .on('mouseout', () => {
-            tooltip.transition()
-                .duration(500)
-                .style('opacity', 0);
-        });
-
-    svg.append('text')
-        .attr('x', width / 2)
-        .attr('y', -margin.top / 2) // Adjusted y position for top alignment
-        .attr('text-anchor', 'middle')
-        .style('font-size', '1.5em')
-        .text('2024 Election Results');
-
-    // Alliance 1 label
-    if (alliance1Labels.length > 0) {
-        svg.append('text')
-            .attr('x', width - 10) // Adjusted x position for right alignment
-            .attr('y', -margin.top / 4) // Adjusted y position for top alignment
-            .style('font-size', '0.8em')
-            .text(`${alliance1Labels.join(', ')}`)
-            .attr('fill', '#007bff')
-            .attr('text-anchor', 'end');
+        return aggregatedData;
     }
 
-    // Alliance 2 label
-    if (alliance2Labels.length > 0) {
-        svg.append('text')
-            .attr('x', width - 10) // Adjusted x position for right alignment
-            .attr('y', -margin.top / 4 + 20) // Adjusted y position for top alignment
-            .style('font-size', '0.8em')
-            .text(`${alliance2Labels.join(', ')}`)
-            .attr('fill', '#28a745')
-            .attr('text-anchor', 'end');
+    // Render chart using D3.js
+    function renderChart(data) {
+        // Clear previous chart
+        const existingSvg = document.querySelector('#chart svg');
+        if (existingSvg) {
+            existingSvg.remove();
+        }
+
+        const margin = { top: 20, right: 20, bottom: 100, left: 150 }; // Adjust left margin for ward names
+        const width = 1000 - margin.left - margin.right; // Adjust width
+        const height = 500 - margin.top - margin.bottom;
+
+        const svg = d3.select('#chart')
+            .append('svg')
+            .attr('width', width + margin.left + margin.right)
+            .attr('height', height + margin.top + margin.bottom)
+            .append('g')
+            .attr('transform', `translate(${margin.left},${margin.top})`);
+
+        const wards = Array.from(new Set([
+            ...Object.keys(data.alliance1),
+            ...Object.keys(data.alliance2)
+        ]));
+
+        const x = d3.scaleBand()
+            .domain(wards)
+            .range([0, width])
+            .padding(0.1);
+
+        const y = d3.scaleLinear()
+            .domain([0, d3.max([
+                ...Object.values(data.alliance1),
+                ...Object.values(data.alliance2)
+            ])])
+            .nice()
+            .range([height, 0]);
+
+        svg.append('g')
+            .attr('transform', `translate(0,${height})`)
+            .call(d3.axisBottom(x))
+            .selectAll('text')
+            .attr('transform', 'rotate(-45)')
+            .style('text-anchor', 'end');
+
+        svg.append('g')
+            .call(d3.axisLeft(y));
+
+        const tooltip = d3.select('#chart')
+            .append('div')
+            .attr('class', 'tooltip')
+            .style('opacity', 0);
+
+        const barWidth = x.bandwidth() / 2;
+
+        svg.selectAll('.bar1')
+            .data(Object.entries(data.alliance1))
+            .enter()
+            .append('rect')
+            .attr('class', 'bar1')
+            .attr('x', d => x(d[0]))
+            .attr('y', d => y(d[1]))
+            .attr('width', barWidth)
+            .attr('height', d => height - y(d[1]))
+            .attr('fill', 'steelblue')
+            .on('mouseover', function(event, d) {
+                tooltip.transition()
+                    .duration(200)
+                    .style('opacity', .9);
+                tooltip.html(`Party: Alliance 1<br>Ward: ${d[0]}<br>Votes: ${d[1]}`)
+                    .style('left', (event.pageX + 5) + 'px')
+                    .style('top', (event.pageY - 28) + 'px');
+            })
+            .on('mouseout', function() {
+                tooltip.transition()
+                    .duration(500)
+                    .style('opacity', 0);
+            });
+
+        svg.selectAll('.bar2')
+            .data(Object.entries(data.alliance2))
+            .enter()
+            .append('rect')
+            .attr('class', 'bar2')
+            .attr('x', d => x(d[0]) + barWidth)
+            .attr('y', d => y(d[1]))
+            .attr('width', barWidth)
+            .attr('height', d => height - y(d[1]))
+            .attr('fill', 'orange')
+            .on('mouseover', function(event, d) {
+                tooltip.transition()
+                    .duration(200)
+                    .style('opacity', .9);
+                tooltip.html(`Party: Alliance 2<br>Ward: ${d[0]}<br>Votes: ${d[1]}`)
+                    .style('left', (event.pageX + 5) + 'px')
+                    .style('top', (event.pageY - 28) + 'px');
+            })
+            .on('mouseout', function() {
+                tooltip.transition()
+                    .duration(500)
+                    .style('opacity', 0);
+            });
+
+        const legend = svg.append('g')
+            .attr('class', 'legend')
+            .attr('transform', `translate(${width - 120}, 20)`);
+
+        legend.append('rect')
+            .attr('x', 0)
+            .attr('y', 0)
+            .attr('width', 18)
+            .attr('height', 18)
+            .attr('fill', 'steelblue');
+
+        legend.append('text')
+            .attr('x', 24)
+            .attr('y', 9)
+            .attr('dy', '.35em')
+            .text('Alliance 1');
+
+        legend.append('rect')
+            .attr('x', 0)
+            .attr('y', 24)
+            .attr('width', 18)
+            .attr('height', 18)
+            .attr('fill', 'orange');
+
+        legend.append('text')
+            .attr('x', 24)
+            .attr('y', 33)
+            .attr('dy', '.35em')
+            .text('Alliance 2');
     }
-
-    // Animate bars and axis
-    svg.selectAll('.bar1, .bar2')
-        .transition()
-        .duration(1000)
-        .attr('y', d => y(d))
-        .attr('height', d => height - y(d));
-
-    svg.selectAll('text')
-        .transition()
-        .duration(1000);
-
-    // Animate axis
-    svg.select('.x.axis')
-        .transition()
-        .duration(1000)
-        .call(xAxis);
-
-    svg.select('.y.axis')
-        .transition()
-        .duration(1000)
-        .call(yAxis);
-
-    const chartContainer = document.querySelector('.chart-container');
-    chartContainer.scrollIntoView({ behavior: 'smooth' });
-}
-
 });
